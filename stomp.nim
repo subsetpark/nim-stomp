@@ -1,4 +1,4 @@
-# vim: set et nosta sw=4 ts=4 ft=nim : 
+# vim: set et nosta sw=4 ts=4 ft=nim :
 #
 # Copyright (c) 2016, Mahlon E. Smith <mahlon@martini.nu>
 # All rights reserved.
@@ -51,7 +51,7 @@
 ##
 ## Protocol support
 ## ----------------
-## 
+##
 ## Examples
 ## =========
 ##
@@ -68,7 +68,7 @@ import
     uri
 
 const
-    VERSION = "0.1.0" ## The current program version.
+    VERSION = "0.1.1" ## The current program version.
     NULL    = "\x00"  ## The NULL character.
     CR      = "\r"    ## The carriage return character.
     CRLF    = "\r\n"  ## Carriage return + Line feed (EOL).
@@ -298,7 +298,7 @@ proc newStompClient*( s: Socket, uri: string ): StompClient =
     result.username      = result.uri.username
     result.password      = result.uri.password
     result.host          = result.uri.hostname
-    result.vhost         = result.uri.path
+    result.vhost         = result.uri.path.strip(chars = {'/'}, trailing = false)
     result.timeout       = 500
     result.subscriptions = @[]
     result.transactions  = @[]
@@ -584,7 +584,7 @@ proc nack*( c: StompClient, id: string, transaction: string = nil ): void =
     ## on error:
     ##
     ## .. code-block:: nim
-    ##    
+    ##
     ##  stomp.subscribe( "/queue/test", "client-individual" )
     ##  FIXME: attach procs
     ##  stomp.wait_for_messages
