@@ -468,8 +468,8 @@ proc send*( c: StompClient,
 
 proc subscribe*( c: StompClient,
             destination: string,
-            ack        = "auto",
-            id: string = nil,
+            ack:         string = "auto",
+            id:          string = nil,
             headers:     seq[ tuple[name: string, value: string] ] = @[] ): void =
     ## Subscribe to messages at **destination**.
     ##
