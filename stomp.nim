@@ -469,6 +469,7 @@ proc send*( c: StompClient,
 proc subscribe*( c: StompClient,
             destination: string,
             ack        = "auto",
+            id: string = nil,
             headers:     seq[ tuple[name: string, value: string] ] = @[] ): void =
     ## Subscribe to messages at **destination**.
     ##
@@ -482,7 +483,10 @@ proc subscribe*( c: StompClient,
     if not c.connected: raise newException( StompError, "Client is not connected." )
     c.socksend( "SUBSCRIBE" & CRLF )
     c.socksend( "destination:" & destination & CRLF )
-    c.socksend( "id:" & $c.subscriptions.len & CRLF )
+    if id.isNil:
+        c.socksend( "id:" & $c.subscriptions.len & CRLF )
+    else:
+        c.socksend( "id:" & id & CRLF )
     if ack == "client" or ack == "client-individual":
         c.socksend( "ack:" & ack & CRLF )
     else:
