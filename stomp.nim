@@ -291,14 +291,17 @@ proc newStompClient*( s: Socket, uri: string ): StompClient =
     ##    sslContext.wrapSocket(socket)
     ##    var stomp = newStompClient( socket, "stomp+ssl://test:test@example.com/%2Fvhost" )
     ##
+    let
+      uri = parse_uri( uri )
+      vhost = if uri.path.len > 1: uri.path.strip(chars = {'/'}, trailing = false) else: uri.path
     new( result )
     result.socket        = s
     result.connected     = false
-    result.uri           = parse_uri( uri )
-    result.username      = result.uri.username
-    result.password      = result.uri.password
-    result.host          = result.uri.hostname
-    result.vhost         = result.uri.path.strip(chars = {'/'}, trailing = false)
+    result.uri           = uri
+    result.username      = uri.username
+    result.password      = uri.password
+    result.host          = uri.hostname
+    result.vhost         = vhost
     result.timeout       = 500
     result.subscriptions = @[]
     result.transactions  = @[]
